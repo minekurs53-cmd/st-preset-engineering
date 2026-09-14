@@ -1,0 +1,2 @@
+# 强制 LF：Windows 文本模式的 CRLF 曾让"逐字节还原"差 4896 字节（本项目教训）
+* text=auto eol=lf

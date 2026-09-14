@@ -1,0 +1,52 @@
+{
+  "preset": {
+    "name": "<预设名>-重铸版",
+    "source_dir_readonly": "<源预设目录>/",
+    "working_copy": "<工作副本路径>.json",
+    "verify_command": "python <tool_dir>/01_source_manifest.py",
+    "tool_dir": "<tool_dir>",
+    "sensitive_strategy": "placeholder-pipeline",
+    "outbound_files_pattern": "*.public.*",
+    "hash_baseline": null
+  },
+  "structure": {
+    "switch_layer": "prompt_order",
+    "order_blocks": [100001],
+    "group_notation": {"❗": "组内必选一", "❔": "可选零或一", "❕": "自由多选", "🆎": "同开同关", "🔒": "常开锚点"},
+    "zone_marker_style": "〈…〉标题条目",
+    "branch_zone": "〈填充功能相关〉",
+    "model_branches": [
+      {"model": "GLM（默认）", "tail": "❗1 GLM用尾部", "template": "❗2📅非预填充输出模板", "slot_written": "<家族前缀>_思维链_非预填充定位", "slot_read_by_template": null, "extra_params": null},
+      {"model": "DeepSeek 官方", "tail": "❗1 DS官/哈/豆预填充", "template": "❗2📖预填充输出模板", "slot_written": "<家族前缀>_思维链_预填充定位", "slot_read_by_template": "<家族前缀>_思维链_预填充定位", "extra_params": "聊天补全来源必须选对应服务商，否则伪预填充失效"},
+      {"model": "Minimax", "tail": "❗1 Minimax预填充", "template": "❗2📖Minimax预填充输出模板", "slot_written": "<家族前缀>_思维链_预填充定位", "slot_read_by_template": "<家族前缀>_思维链_预填充定位", "extra_params": null},
+      {"model": "Kimi（支持关思维链）", "tail": "❗1 KIMI用尾部", "template": "❗2📅非预填充输出模板", "slot_written": "<家族前缀>_思维链_非预填充定位", "slot_read_by_template": null, "extra_params": "reasoning_effort 改 none 防双重思维链"},
+      {"model": "Kimi（不支持关）", "tail": "❗1 KIMI用尾部", "template": "❗2📅KIMI输出模板", "slot_written": "<家族前缀>_思维链_非预填充定位", "slot_read_by_template": "<家族前缀>_思维链_非预填充定位", "extra_params": "reasoning_effort 改 none"},
+      {"model": "Gemini", "tail": "❗1 DS官/哈/豆预填充", "template": "❗2📖预填充输出模板", "slot_written": "<家族前缀>_思维链_预填充定位", "slot_read_by_template": "<家族前缀>_思维链_预填充定位", "extra_params": "无思维链模型改走 D/G/K 对"},
+      {"model": "豆包/Gemini/Kimi 破甲合流", "tail": "❗1🍑D/G/K尾部输入", "template": "❗2🍑D/G/K输出模板", "slot_written": "<家族前缀>_思维链_特殊尾部定位", "slot_read_by_template": "<家族前缀>_思维链_特殊尾部定位", "extra_params": null},
+      {"model": "Claude", "tail": "❗1 克/其他用尾部", "template": "❗2📖预填充输出模板", "slot_written": "<家族前缀>_思维链_预填充定位", "slot_read_by_template": "<家族前缀>_思维链_预填充定位", "extra_params": "作者基准"}
+    ],
+    "live_slots": ["助手要求", "<家族前缀>_前置处理", "<家族前缀>_创作准则", "<家族前缀>_文风准则", "<家族前缀>_后置功能", "<家族前缀>_思维链_本体", "<家族前缀>_定位", "<家族前缀>_预填充L2", "<家族前缀>_思维链_预填充定位", "<家族前缀>_思维链_非预填充定位", "<家族前缀>_思维链_特殊尾部定位", "<家族前缀>_模板格式_上", "<家族前缀>_模板格式_下"],
+    "tag_contracts": [
+      {"literal": "<thinking>", "consumers": ["去多余思维链提示词（正则，只认 thinking）"]},
+      {"literal": "</(?:think|thinking)>", "consumers": ["思维链美化（正则，双标签兼容）"]},
+      {"literal": "<details><summary>(实时|小)总结", "consumers": ["1到9楼去小总结（正则）", "10楼以上只留小总结（正则，S9：改一侧=整楼清空）"]},
+      {"literal": "<lau>…</lau>", "consumers": ["转译模式原文去除（显示侧+提示词侧两条）"]}
+    ],
+    "default_switch_state": "GLM 路线 B：❗1 GLM用尾部 + ❗2📅非预填充输出模板 ON（D/G/K 对与抗平淡 OFF，抗缺陷 ON）",
+    "landmines": ["重铸版无已知地雷（历史孤儿与僵尸 setvar 条目已清），但新增停用条目时仍须查 setvar 主槽写入"]
+  },
+  "adaptation": {
+    "user_models": ["glm-5.3", "deepseek"],
+    "matrix": "<方法论文档>/model-capability-matrix.json",
+    "sop_adapt": "<方法论文档>/新模型适配SOP.md",
+    "sop_feature": "<方法论文档>/新功能加入SOP.md"
+  },
+  "complexity": {
+    "entries": 186,
+    "scripts": 4,
+    "regexes": 15,
+    "extension_blocks": ["regex_scripts", "tavern_helper", "SPreset"],
+    "level": "heavy"
+  },
+  "notes": "本文件是发布用脱敏副本：预设名、家族前缀与本机绝对路径均已替换为 <…> 占位符，实际使用按 references/profile-spec.md 填真实值并保证可跑。破甲档位语义按用户决定不登记（条目名自含语义）。GLM 行 slot_read_by_template=null：路线 B 定位语经常开锚点发射，不在模板内 getvar——这是修复后的正确接线。"
+}

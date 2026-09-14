@@ -1,0 +1,6 @@
+# 打包产物走 GitHub Releases，不入库
+dist/
+
+# OS 杂物
+Thumbs.db
+.DS_Store
