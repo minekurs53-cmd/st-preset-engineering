@@ -73,7 +73,7 @@ Reviewers can only match text that is **present**. This skill keeps sensitive bo
 
 4. **Red lines first + permission boundary statement**. S0 is step one — rules before any file operation: source preset read-only, hash verification before and after changes, outbound files must have zero lexicon hits, remote links inside preset scripts **disabled by default** (never decide on the user's behalf to run remote code), mock endpoint listening on 127.0.0.1 only. SKILL.md opens with the Safety Boundary Statement so the behavior envelope is visible before use.
 
-5. **Lean context**. SKILL.md is ~100 lines (cap 500); the details live in 11 references loaded on demand. No redundant text in context = smaller review exposure and less truncation pressure.
+5. **Lean context**. SKILL.md is ~100 lines (hard cap 300); the details live in 11 references loaded on demand. No redundant text in context = smaller review exposure and less truncation pressure.
 
 ### Why this reduces truncation (mechanism, not promise)
 
