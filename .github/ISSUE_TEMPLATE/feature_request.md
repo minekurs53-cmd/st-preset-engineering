@@ -9,7 +9,7 @@ labels: enhancement
 
 **为什么现有机制覆盖不了**：七步骨架（S0–S6）/ 步骤路由 / preset-profile 机制 / 现有 references 中，最接近的是什么？差距在哪？
 
-**建议的形态**：改动 SKILL.md 骨架？新增一篇 reference？改 profile schema？还是工具带层面（不在本仓库范围）？
+**建议的形态**：改动 SKILL.md 骨架？新增一篇 reference？改 profile schema？还是工具实现层面（由本机按契约提供，不在本仓库范围）？
 
 **替代方案**：不做的代价是什么？
 

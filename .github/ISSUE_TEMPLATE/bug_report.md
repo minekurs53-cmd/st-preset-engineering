@@ -9,7 +9,7 @@ labels: bug
 
 - 代理平台（Claude Code / claude.ai / 其他）：
 - 使用版本（中文版 / 英文版，SKILL.md metadata.version）：
-- 是否有配套工具带（profile.tool_dir 是否可跑）：
+- 工具层（`profile.tool_dir` 是否可跑；现成实现 / 按契约自建）：
 
 **触发的请求原文**（用户对代理说的话）：
 
