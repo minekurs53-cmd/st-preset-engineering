@@ -50,7 +50,7 @@ st-preset-engineering-en/
     ├── pitfalls.md       # Lesson library: every entry actually happened (case + defense)
     ├── best-practices.md # 20 field-tested practices before writing bodies / editing templates
     ├── profile-spec.md   # Full preset-profile.json schema + minimal template
-    └── toolmap.md        # Tool call cards: command / expected output / failure criteria / generality tags
+    └── toolmap.md        # Tool contract cards: input → decision logic → output format → expected output, with the tool-building method
 ```
 
 ## Safety highlights: letting a "reviewed" agent handle sensitive presets safely
@@ -110,10 +110,10 @@ git clone https://github.com/minekurs53-cmd/st-preset-engineering.git
 |---|---|
 | Agent platform | Any platform honoring the Agent Skills convention (SKILL.md frontmatter + directory loading) |
 | Skill body | Pure Markdown; no bundled scripts; no external network access |
-| Companion tool band | Structure dossier / sanitizer pipeline / mock endpoint / offline assembly / audit — Python 3.8+ scripts, **not distributed with this repository**; paths registered via `profile.tool_dir` |
-| Without the tool band | S0 hash verification works with any sha256 tool; the dossier and assembly reconciliation need equivalent tooling of your own. Step 0 of the skill mandates: unreadable references must be explicitly reported — **never silently skipped** |
+| Companion tool band | The step tools (structure dossier / sanitizer pipeline / mock endpoint / offline assembly / audit / reference scan) are prescribed as **capability contracts** (the nine contract cards in toolmap.md), implementable with Python 3.8+ stdlib; `profile.tool_dir` registers the local implementation — ready-made scripts or equivalent tools newly built against the contracts both work |
+| Without the tool band | Not blocking: S0 hash verification works with any sha256 tool; the rest are implemented locally per the matching contract card (instance data externalized / read-only & write discipline / minimal output surface / diff-able conclusions / self-test first), then registered into the profile after passing self-tests. Step 0 of the skill mandates: unreadable references must be explicitly reported — **never silently skipped** |
 
-> **Why the tool band isn't bundled**: the sanitizer depends on a sensitive-term lexicon; distribution is undecided (see FAQ). Decoupling the skill layer from the tool layer is deliberate — changing preset family changes the profile, not the skeleton.
+> **Why the tools aren't bundled**: the sanitizer depends on a sensitive-term lexicon (instance data). Decoupling the skill layer from the tool layer is deliberate — the skill prescribes only capability contracts, the implementation is provided locally; changing preset family changes the profile, not the skeleton.
 
 ## Compatibility
 
@@ -123,8 +123,8 @@ git clone https://github.com/minekurs53-cmd/st-preset-engineering.git
 
 ## FAQ
 
-**Q: Where do I get the tool band?**
-A: Not distributed with the repository for now (the sanitizer depends on a sensitive-term lexicon; distribution undecided). Without it you can still run S0/S3/S6 (diagnosis and handover need no tools); S1/S2/S4/S5's dossier and assembly reconciliation need equivalent tooling of your own — the skill explicitly reports any failed reference instead of skipping it silently.
+**Q: Where do I get the tools?**
+A: This repository binds to no concrete tools — the skill prescribes each tool class's **capability contract** (input → decision logic → output format → expected output; see the nine contract cards in `references/toolmap.md`). If a local implementation exists, register it in `profile.tool_dir` and use it; if not, the agent implements the equivalent tool locally per the contract card (Python 3.8+ stdlib suffices, with self-tests) and registers it. S0 hash verification works with any sha256 tool. Either way, the skill explicitly reports any failed reference instead of skipping it silently.
 
 **Q: My preset has no sensitive content?**
 A: Set `sensitive_strategy: "none"` in the profile; the pipeline runs unchanged and skips sanitization. All other disciplines (source read-only / generator's three assertions / three-gate verification) stay exactly the same.

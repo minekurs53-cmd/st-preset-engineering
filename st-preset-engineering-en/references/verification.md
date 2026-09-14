@@ -2,6 +2,8 @@
 
 > **When to read**: S5; before writing the words "verification passed".
 > **Discipline**: the gates are ordered cheap to expensive; **stop at the first failure** — L1 red means never entering L2. Each gate answers a different question; none substitutes for another.
+> **Without a tool**: when a gate's tool cannot run, build it per the matching toolmap contract card (L1 = Card 5, L2 = Card 7, L3 = Card 8), pass its self-test, then verify — **never skip a gate, never substitute eyeballing**.
+> **No environment ≠ no tool**: tools can be built; environments cannot — L3/B1 needs a local ST install, L2/B2 needs a PUBLIC copy (quarantine strategy produces none). When the environment lacks conditions: mark that gate's conclusions "unverified + what's missing" honestly — **never bridge with softened wording**, and never let a lower gate's all-green imply a higher gate passed.
 
 ## L1 Structural layer (minutes; always required)
 
@@ -16,6 +18,7 @@ python <tool_dir>/p1_evidence.py report --preset <output.json>
 | Mutex-group ON count | Exactly 1 per group (by-design exceptions registered in the dossier) | Configuration violation / double template |
 | Branch pairing | Template's getvar slot == this route's written slot | Broken pairing = silent degradation |
 | Double-False regexes | 0 | Permanently rewrites chat history (error) |
+| Absolute-injection / sp=true annotation | Same as before, each with a stated reason | Reordering does not affect them — missing the annotation makes changes to injection shape falsely green |
 
 ⚠️ **L1 blind spot (measured)**: L1 all green ≠ semantic consistency. Gear values / length minimums hard-coded in the body of other ON entries (e.g. after a length-gear change, a thinking-gear entry still forbidding "body under 1200 characters") **pass every group-rule check** — gear-change/linked changes must additionally run: a repo-wide body scan of ON entries (numeric anchors) or an L3 assembly-truth manual review.
 

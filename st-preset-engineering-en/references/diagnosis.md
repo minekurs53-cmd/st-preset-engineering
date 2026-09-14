@@ -22,10 +22,10 @@
 
 ## Diagnosis procedure
 
-1. Walk the S1 dossier through the five structural risks (orphans / dead slots / double-False / mutex / remote dependencies) — all **mandatory checks**, never samples.
+1. Walk the S1 dossier through the five structural risks (orphans / dead slots / double-False / mutex / remote dependencies) — all **mandatory checks**, never samples. Grade remote dependencies per red-lines rule 8 (I/W/E). **Confirm the input type first**: no `prompts` key at top level / `entries` is a dict (lorebook signature) → this route does not apply; output an "input recognition + downgrade note" report, **never diagnose it as an empty preset** (measured: a lorebook input produced an empty report with exit 0, nearly misread).
 2. Pairing integrity: for every model branch, the template's getvar slot == the route's ❗1 setvar slot? (Measured lesson: three routes self-consistent, one broken, zero errors — the only symptom was degraded output.)
-3. Contract scan: tag/format literals in entry bodies ↔ regex patterns ↔ script references — all three agree?
-4. Behavioral defects: compare S2 ground truth against template requirements item by item (length/format/triggers/counters), **give a number for every item** (hit rate, occurrence counts, drift events).
+3. Contract scan (three-way consistency; tool contracts = Card 5 §5 + Card 9): tag/format literals in entry bodies ↔ regex patterns ↔ script references — all three agree? **Regex-side caveat**: literal extraction only recognizes `</?tag>` shapes; consumers hidden inside regex syntax patterns (a bare `think` in find rather than `<think>`) are false negatives — every tag the matrix marks "one-sided" gets one targeted substring recheck. **Alternation-form tags** (`<(a|b|c)>`) are missed by `</?tag>`-shape extraction entirely — the same "one-sided but actually two-sided" trap, caught by the same targeted substring recheck (measured: `<(thinking|suggestions|disclaimer)>` reported one-sided, actually two-sided).
+4. Behavioral defects: compare S2 ground truth against template requirements item by item (length/format/triggers/counters), **give a number for every item** (hit rate, occurrence counts, drift events). **Default path with no ground truth** (both B1/B2 unreachable: no local ST, quarantine strategy produces no PUBLIC copy): everything behavioral goes to the "unverified list" with **what is missing written item by item** (missing dump / missing N turns / which path) — never write "passed", never omit silently. A diagnosis report is complete only when the five-mandatory-check reconciliation AND the unverified list are both present.
 5. Summarize ordered by error (irreversible damage / silent failure) → warn (systematic deviation) → info (improvement opportunities); each item gets a "fix direction" (not the fix itself — fixes happen in S4).
 
 ## Report format (minimal template)
@@ -38,9 +38,19 @@
 - [W1] <defect> — measured (<dump/data>, <numbers>) → fix direction: <…>
 ### Info
 - [I1] <improvement opportunity> — presumed (<basis>)
+### Extension hookpoint inventory
+- <the S1 hookpoint three-question conclusions land here (block / kind / status / note table)>
 ### Unverified list
 - <item> — missing <what>
 ```
+
+## Cross-preset shared infrastructure (recognizing same-author / sibling-preset copies)
+
+Same-family or sibling presets copy infrastructure between each other (same-name entries + same inj_order, regex families copied over, same-family floating-window scripts) — if this cross-preset relationship is not registered, a single report misses context like "this is part of a sibling-preset series" (measured: two presets shared same-name entries with identical inj_order and params, regex families copied between them, same-family floating windows; cross-referencing the two reports locates it). When several presets are diagnosed in one session:
+
+- Same-name entries (same inj_order/same state) appearing across presets → register "cross-preset shared infrastructure" in each report's Info and cross-reference;
+- Same-family regexes/scripts copied between presets → note the source preset and the sync surface;
+- Cross-preset verdicts still list structural facts only; never guess author intent.
 
 ## Discipline
 

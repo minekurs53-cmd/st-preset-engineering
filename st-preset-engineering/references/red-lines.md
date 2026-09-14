@@ -38,13 +38,25 @@
 - `markdownOnly=false` 且 `promptOnly=false` 且未禁用的正则会**永久改写聊天记录**（实测落盘实锤：消息本体与 swipe 的标记被剥除不可逆）。
 - S1 档案发现这类正则 → 诊断报告列为 **error**，修复方式 = 拆成显示侧（markdownOnly）+ 提示词侧（promptOnly）两条，或经用户同意后禁用。**不许留着**。
 
-## 规则 6：连接字段不过预设（源码级教训）
+## 规则 6：连接字段默认不过预设（源码级教训）
 
-`custom_prompt_post_processing` 等连接绑定字段**写进预设不生效**（ST 源码：预设切换时跳过 isConnection 字段）。需要特定值时：写进交付说明让用户在 UI 手动核对，**不要写进预设 JSON 假装已生效**（media_inlining 这类 `isConnection=false` 字段才随预设走）。
+`custom_prompt_post_processing` 等连接绑定字段**默认写进预设不生效**——ST 源码在预设切换时跳过 `isConnection` 字段，但**有前提**：源码实为条件跳过（`if (isConnection && !bind_preset_to_connection) continue`），用户在 UI 开启"预设绑定连接"时会应用。所以：需要特定值时写进交付说明让用户在 UI 手动核对勾选态与字段值，**不要写进预设 JSON 假装已生效**（media_inlining 这类 `isConnection=false` 字段才随预设走）。
 
 ## 规则 7： 远程依赖默认停用
 
 脚本里 `injectScript`/外链 JS 的（不可验证域名）：S1 登记为风险；默认 `enabled=false` 并在交付说明写明恢复方法。别替用户决定执行远程代码。
+
+## 规则 8：远程资源风险分级（S3 用）
+
+对脚本/正则里的远程引用分级登记（判据：静态资源 → 可执行代码）：
+
+| 级 | 形态 | 例子 | 处置 |
+|---|---|---|---|
+| I | 静态资源 | 图片 CDN、CSS 链接 | 登记即可 |
+| W | 只读 API | fetch 第三方 JSON/API | 登记域名与用途，注明"内容随远端变化" |
+| **E** | **可执行代码注入** | `injectScript(…, 'https://第三方域名/inject.js')` 无版本锁/无校验和 | **判 error**：供应链风险。只读任务下**不外联抓取**（发请求需用户同意）——登记"内容不可审查"声明 + 处置建议（交付前隔离审查或移除） |
+
+外联纪律：默认不向第三方发请求；确需抓取审查时先征得用户同意。
 
 ## S0 收尾检查（30 秒）
 

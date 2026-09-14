@@ -38,13 +38,25 @@ First decide whether the preset contains sensitive content (NSFW guidance / jail
 - A regex with `markdownOnly=false` and `promptOnly=false` and not disabled will **permanently rewrite chat history** (confirmed on disk: markers stripped from message bodies and swipes, irreversibly).
 - If the S1 dossier finds such a regex → list it as an **error** in the diagnosis report. Fix = split into a display-side (markdownOnly) + prompt-side (promptOnly) pair, or disable with user consent. **Never leave it in place.**
 
-## Rule 6: Connection-bound fields don't take effect from presets (source-code lesson)
+## Rule 6: Connection-bound fields don't take effect from presets by default (source-code lesson)
 
-Connection-bound fields such as `custom_prompt_post_processing` **have no effect when written into a preset** (ST source: connection-bound fields are skipped on preset switch). When a specific value is needed: put it in the handover notes for the user to check in the UI — **never write it into the preset JSON pretending it took effect** (fields like media_inlining with `isConnection=false` do travel with the preset).
+Connection-bound fields such as `custom_prompt_post_processing` **have no effect when written into a preset by default** — ST source skips `isConnection` fields on preset switch, **but conditionally**: the code actually reads `if (isConnection && !bind_preset_to_connection) continue` — when the user enables "bind preset to connection" in the UI, they do apply. So: when a specific value is needed, put it in the handover notes for the user to check both the bind checkbox and the field value in the UI — **never write it into the preset JSON pretending it took effect** (fields like media_inlining with `isConnection=false` do travel with the preset).
 
 ## Rule 7: Remote dependencies disabled by default
 
 Scripts containing `injectScript` / external JS links (unverifiable domains): register as a risk in S1; default `enabled=false` and note the recovery method in the handover. Never decide on the user's behalf to execute remote code.
+
+## Rule 8: Remote-resource risk grading (used in S3)
+
+Grade every remote reference in scripts/regexes (criterion: static asset → executable code):
+
+| Grade | Form | Example | Handling |
+|---|---|---|---|
+| I | Static asset | image CDN, CSS link | register |
+| W | Read-only API | fetching third-party JSON/API | register domain & purpose, note "content changes with the remote" |
+| **E** | **Executable code injection** | `injectScript(…, 'https://third-party/inject.js')` without version lock / checksum | **grade as error**: supply-chain risk. Read-only tasks **do not fetch** (requests need user consent) — register a "content unauditable" declaration + handling advice (quarantine-review or remove before delivery) |
+
+Outbound discipline: never send requests to third parties by default; get user consent first when a fetch-audit is genuinely needed.
 
 ## S0 close-out check (30 seconds)
 
