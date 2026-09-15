@@ -4,7 +4,7 @@ description: SillyTavern（酒馆/ST）预设的工程化处理与构建：解�
 license: MIT
 compatibility: 面向支持 Agent Skills 约定的代理平台（SKILL.md + .agents/skills 或等价目录）。七步骨架为纯 Markdown，无内置脚本；工具层以能力契约（toolmap.md）约定，`profile.tool_dir` 登记本地实现——现成工具或按契约新建的等价工具均可。
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # ST 预设工程

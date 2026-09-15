@@ -37,11 +37,12 @@
     // ↑ must be refilled for every new preset! Unfamiliar notation → stop and ask the user; never guess (the sample notation is one author's private system)
     "zone_marker_style": "〈…〉 heading entries",     // how phase boundaries are recognized; presets without markers write "none"
     // ↑ zone_marker_style is display-only; **what actually drives the tools are the optional regex fields below (data-driven, style-agnostic)**.
-    //   Four real-world styles measured: 〈…〉 heading entries / paired boundary entries (——X begin—— … ——X end——) / emoji+category-name prefixes / "----X" hyphen headings.
+    //   Six real-world styles measured: 〈…〉 heading entries / paired boundary entries (——X begin—— … ——X end——) / same-name boundary pairs (toggle type) / emoji+category-name prefixes / HTML-tag paired entries (`<background>…</background>`) / "----X" hyphen headings.
     //   Built-in style recognition is untrustworthy (measured: the first version recognized one style and missed all others) — profile regexes take precedence over tool built-ins.
     "zone_title_re": "^----[^\\s-]+",                // optional: heading-entry recognition regex (style-agnostic)
     "zone_pair_start_re": null,                      // optional: paired boundary — begin-entry regex (null if none)
     "zone_pair_end_re": null,                        // optional: paired boundary — end-entry regex
+    //   ↑ Same-name boundary pairs (toggle type): when start/end are filled with the **same** regex, the tool treats it as "second occurrence of the same name = close" (measured: boundary entries share the name at open and close — ——X—— appearing twice; first opens, second closes; differently-named boundaries still use sequential open semantics)
     "zone_category_re": null,                        // optional: emoji+category-name-prefix style — per-entry category-name extraction regex (style-agnostic)
     // ↑ the 3rd style (emoji+category-name prefixes) has no title/pair field to use; measured as needing this extra field (`^[^︱丨]{1,6}[︱丨]\s*([^-\s丨︱]{1,10})`, capture group 1 = category name).
     //   ⚠️ When a regex has capture groups, **capture group 1 = the zone name** (e.g. `━━━━ X ━━━━` separator entries only want a pure category-name label, taken via the capture group) — same for title_re.

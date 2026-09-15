@@ -8,7 +8,7 @@
   author       = {minekurs53-cmd},
   year         = {2026},
   howpublished = {\url{https://github.com/minekurs53-cmd/st-preset-engineering}},
-  note         = {Agent Skill (SKILL.md); version 1.2.0}
+  note         = {Agent Skill (SKILL.md); version 1.3.0}
 }
 ```
 

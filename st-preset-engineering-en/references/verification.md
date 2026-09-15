@@ -14,6 +14,7 @@ python <tool_dir>/p1_evidence.py report --preset <output.json>
 | Criterion | Expected | What a violation means |
 |---|---|---|
 | Orphan entries | 0 (or identical to before, each with a stated reason) | An entry not wired into order = dead work / ghost reference |
+| order stale refs | 0 (or identical to before, each with a stated reason) | order referencing a non-existent identifier = old-version residue / broken naming; the common accident of hot-upgrade renames |
 | Dead slots (write-only) | 0 (a new dead slot = debt introduced this round) | Someone wrote a variable nobody will ever read |
 | Mutex-group ON count | Exactly 1 per group (by-design exceptions registered in the dossier) | Configuration violation / double template |
 | Branch pairing | Template's getvar slot == this route's written slot | Broken pairing = silent degradation |

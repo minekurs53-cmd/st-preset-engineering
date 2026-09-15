@@ -4,7 +4,7 @@ description: Engineering workflows for SillyTavern (ST) presets: structural auto
 license: MIT
 compatibility: For agent platforms that support the Agent Skills convention (SKILL.md + .agents/skills or equivalent directory). The seven-step skeleton is pure Markdown with no bundled scripts; the tool layer is prescribed as capability contracts (toolmap.md) and registered via preset-profile.json's tool_dir — ready-made tools or equivalent tools newly built against the contracts both work.
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # ST Preset Engineering
